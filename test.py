@@ -1,3 +1,18 @@
+
+node -v
+npm -v
+
+npx create-react-app test
+npm start
+
+
+npm install -g @angular/cli
+ng new test
+ng serve
+
+
+
+
 Download Node.js and install
 Go to Windows Powershell Run as Administrator type Set-ExecutionPolicy RemoteSigned
 Open VS Code, terminal and then proceed further
