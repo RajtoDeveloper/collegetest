@@ -1,222 +1,320 @@
-1.List contains a sublist
-a=list(input("Enter list values").split())
-b=list(input("Enter sublist values").split())
-if all(element in a for element in b):
- print("The sublist is present in the list")
-else:
- print("The sublist is not present in the list")
+1.BFS
+def bfs(graph, start):
+ visited = []
+ queue = [start]
+ while queue:
+    node = queue.pop(0)
+    if node not in visited:
+        print(node,end=" ")
+        visited.append(node)
+        queue.extend(graph[node])
+graph = {
+ 'A': ['B', 'C'],
+ 'B': ['D', 'E'],
+ 'C': ['F'],
+ 'D': [],
+ 'E': ['F'],
+ 'F': []
+}
+print("BFS Traversal:")
+bfs(graph, 'A') 
 
-2.Dictionary values with their arguments
-marks = [ 
- {"m1":90,"m2":50}, 
- {"m1":50,"m2":50}, 
- {"m1":95,"m2":100}, 
-] 
-for mark in marks: 
- mark["avg"] = ( mark["m1"] + mark["m2"] ) / 2
-print(marks)
+2.DFS
+def dfs(graph, node, visited=None):
+ if visited is None:
+    visited = []
+ if node not in visited:
+    print(node, end=" ")
+    visited.append(node)
+    for neighbor in graph[node]:
+        dfs(graph,neighbor,visited)
+graph = {
+ 'A': ['B', 'C'],
+ 'B': ['D', 'E'],
+ 'C': ['F'],
+ 'D': [],
+ 'E': ['F'],
+ 'F': []
+}
+print("DFS Traversal:")
+dfs(graph, 'A') 
 
-3.Manipulation of tuple elements
-a=(10,20,30)
-print("Tuple:",a)
-print("Type:",type(a))
-print("Accessing index",a[1])
-b=('a','b','c')
-print('Concatenation',a+b)
-c=('Python')*3
-print("Repetition:",c)
-print("Slice:",a[:2])
-d=[1,2,3,4,5]
-d=tuple(d)
-print("Type Conversion:",type(d))
+3.tic-tac-toe
+print("------------N-DIMENSIONAL TIC TAC TOE game by guru 99.com------------")
+def show(board):
+    for row in board:
+        print(" ".join(row))
+    print()
+while True:
+    board = [['_', '_', '_'],['_', '_', '_'],['_', '_', '_']]
+    show(board)
+    turn = 'X'
+    moves = 0
+    while True:
+        print("Player ", turn)
+        r = int(input("Enter row (0-2): "))
+        c = int(input("Enter col (0-2): "))
+        if board[r][c] != '_':
+            print("Already taken! Try again.")
+            continue
+        board[r][c] = turn
+        moves += 1
+        show(board)
+        win = False
+        for i in range(3):
+            if board[i][0] == board[i][1] == board[i][2] == turn:
+                win = True
+            if board[0][i] == board[1][i] == board[2][i] == turn:
+                win = True
+        if board[0][0] == board[1][1] == board[2][2] == turn:
+            win = True
+        if board[0][2] == board[1][1] == board[2][0] == turn:
+            win = True
+        if win:
+            print("Game Over. Player", turn, "wins!")
+            print("Guru99.com tic tac toe game")
+            break
+        if moves == 9:
+            print("Game over. Players have tied the match.")
+            print("Guru99.com tic tac toe game")
+            break
+        turn = 'O' if turn == 'X' else 'X'
+    again = input("Play Guru99 tic tac toe_Game again? (y/n):").lower()
+    if again != 'y':
+        print("Guru99 TicTacToe game ended.")
+        break
 
-4.Power of an array values
-import numpy as np 
-import pandas as pd 
-arr1 = np.array([[1, 2, 3], [4, 5, 6]]) 
-arr2 = np.array([[1, 2, 3], [4, 5, 6]]) 
-result_numpy = np.power(arr1, arr2)
-print("Numpy power result:")
-print(result_numpy) 
-series1 = pd.Series(arr1.flatten()) 
-series2 = pd.Series(arr2.flatten()) 
-result_pandas = series1.pow(series2)
-print("Pandas power result:")
-print(result_pandas) 
+4. 8 puzzle
+from collections import deque
+def solve(b):
+ s = sum(b, [])
+ if s == list(range(9)): return 0
+ m = [[1,3], [0,2,4], [1,5], [0,4,6], [1,3,5,7], [2,4,8], [3,7],[4,6,8], [5,7]]
+ q = deque([(s, 0)])
+ v = set()
 
-5.String Pangram or not
-import string
-def is_pangram(sentence):
-    alphabet="abcdefghijklmnopqrstuvwxyz"
-    for char in alphabet:
-        if char not in sentence.lower():  
+ while q:
+    t, c = q.popleft()
+    if str(t) in v: continue
+    v.add(str(t))
+    z = t.index(0)
+    for i in m[z]:
+        n = t[:]
+        n[z], n[i] = n[i], n[z]
+        if n == list(range(9)): return c + 1
+        q.append((n, c + 1))
+ return -1
+print(solve([[3,1,2], [4,7,5], [6,8,0]])) 
+
+5.Water jug 
+print("Water Jug problem")
+x = int(input("Enter X:")) #0
+y = int(input("Enter Y:"))  #0
+while True:
+ rno = int(input("Enter the rule no:")) #2 9 2 7 5 9 
+ if rno == 1:
+    if x < 4:
+        x = 4
+ if rno == 2:
+    if y < 3:
+        y = 3
+ if rno == 5:
+    if x > 0:
+        x = 0
+ if rno == 6:
+    if y > 0:
+        y = 0
+ if rno == 7:
+    if x + y >= 4 and y > 0:
+        x, y = 4, y - (4 - x)
+ if rno == 8:
+    if x + y >= 3 and x > 0:
+        x, y = x - (3 - y), 3
+ if rno == 9:
+    if x + y <= 4 and y > 0:
+        x, y = x + y, 0
+ if rno == 10:
+    if x + y <= 3 and x > 0:
+        x, y = 0, x + y
+ print("x =", x)
+ print("y =", y)
+ if x == 2:
+    print("The result is a goal state")
+    break 
+
+6.Travelling salesman problem
+import random
+from itertools import permutations
+def tsp(distances):
+    n = len(distances)
+    best_route = []
+    best_cost = float('inf')
+    for route in permutations(range(n)):
+        cost = 0
+        for i in range(n - 1):
+            cost += distances[route[i]][route[i + 1]]
+        cost += distances[route[-1]][route[0]]
+        if cost < best_cost:
+            best_cost = cost
+            best_route = route
+    return best_route, best_cost
+distances = [
+    [0, 10, 15, 20],
+    [10, 0, 30, 5],
+    [15, 30, 0, 25],
+    [20, 5, 25, 0]
+]
+route, cost = tsp(distances)
+print("The best route is:", route)
+print("The total cost is:", cost)
+
+7.Tower of hanoi
+def tower_of_hanoi(n, source, aux, dest):
+ if n == 0:
+    return
+ tower_of_hanoi(n - 1, source, dest, aux)
+ print(f"Move disk {n} from source {source} to destination {dest}")
+ tower_of_hanoi(n - 1, aux, source, dest)
+n=3
+tower_of_hanoi(n,"A","B","C")
+
+8.Monkey banana
+def monkey_banana_problem(n):
+ climb = 0
+ bananas = 0
+ hungry = True
+ for i in range(n):
+    if hungry:
+        climb += 1
+        bananas += 1
+        hungry = False
+    else:
+        climb += 1
+ return climb, bananas
+n = 10
+climb, bananas = monkey_banana_problem(n)
+print(f"The monkey made {climb} climbs and get {bananas} bananas.")
+
+9.Alpha beta pruning
+MAX, MIN = 1000, -1000
+def minimax(depth, nodeIndex, maximizingPlayer, values, alpha, beta):
+    if depth == 3:
+        return values[nodeIndex]
+    if maximizingPlayer:
+        best = MIN
+        for i in range(0, 2):
+            val = minimax(depth + 1, nodeIndex * 2 + i, False, values, alpha, beta)
+            best = max(best, val)
+            alpha = max(alpha, best)
+            if beta <= alpha:
+                break
+        return best
+    else:
+        best = MAX
+        for i in range(0, 2):
+            val = minimax(depth + 1, nodeIndex * 2 + i, True, values, alpha, beta)
+            best = min(best, val)
+            beta = min(beta, best)
+            if beta <= alpha:
+                break
+        return best
+values = [3, 5, 6, 9, 1, 2, 0, -1]
+print("The optimal value is:", minimax(0, 0, True, values, MIN, MAX))
+
+10. 8-Queens
+global N
+N = 4
+def printSolution(board):
+    for i in range(N):
+        for j in range(N):
+            print(board[i][j], end=' ')
+        print()
+def isSafe(board, row, col):
+    for i in range(col):
+        if board[row][i] == 1:
+            return False
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+    for i, j in zip(range(row, N, 1), range(col, -1, -1)):
+        if board[i][j] == 1:
             return False
     return True
-sentence = "The quick brown fox jumps over the lazy dog"
-if is_pangram(sentence):
-    print("The string is a pangram")
+def solveNQUtil(board, col):
+    if col >= N:
+        return True
+    for i in range(N):
+        if isSafe(board, i, col):
+            board[i][col] = 1
+            if solveNQUtil(board, col + 1):
+                return True
+            board[i][col] = 0  
+    return False
+def solveNQ():
+    board = [[0 for _ in range(N)] for _ in range(N)]
+    if not solveNQUtil(board, 0):
+        print("Solution does not exist")
+        return False
+    printSolution(board)
+    return True
+solveNQ()
+            
+11.Chatbot
+import random
+responses=["Hello,how can I help you?",
+ "What do you want to talk about?",
+ "I'm not sure what you mean.",
+ "Can you repeat that?",
+ "I'm sorry,I don't understand."]
+def get_response():
+ return random.choice(responses)
+def start_chatbot():
+ print("Hello,I'm a chatbot.What do you want to talk about?")
+ while True:
+    user_input=input("You:")
+    if user_input.lower() in ["bye","exit","quit"]:
+        print("Chatbot:Goodbye!")
+        break
+    response=get_response()
+    print(response)
+start_chatbot() 
+
+12.Hangman
+import random
+words = ["apple", "orange"]
+word = random.choice(words)
+attempt = 10
+guessed = ['_'] * len(word)
+print("Welcome to Hangman")
+print(" ".join(guessed))
+while attempt > 0 and '_' in guessed:
+    guess = input("Guess a letter: ").lower()
+    if guess in word:
+        for i in range(len(word)):
+            if word[i] == guess:
+                guessed[i] = guess
+        print("Good guess:", " ".join(guessed))
+    else:
+        attempt -= 1
+        print("Wrong! You have", attempt, "attempts left")
+if '_' not in guessed:
+    print("You won! The word is", word)
 else:
-    print("The string is NOT a pangram")
+    print("You lost! The word is", word)
 
-6.K-Fold 
-from sklearn.model_selection import KFold, cross_val_score
-from sklearn.datasets import load_iris
-from sklearn.tree import DecisionTreeClassifier
-X, y = load_iris(return_X_y=True)
-clf = DecisionTreeClassifier(random_state=42)
-k_folds = KFold(n_splits=5, shuffle=True, random_state=42)
-scores = cross_val_score(clf, X, y, cv=k_folds)
-print("Cross Validation Scores: ", scores)
-print("Average CV Score: {:.2f}".format(scores.mean()))
-print("Number of CV Scores used in Average: ", len(scores))
-
-7.Read a csv file
-mall.csv
-CustomerID,Gender,Age,Annual Income (k$),Spending Score (1-100)
-1,Male,19,15,39
-2,Male,21,15,81
-3,Female,20,16,6
-4,Female,23,16,77
-5,Female,31,17,40
-6,Female,22,17,76
-7,Female,35,18,6
-8,Female,23,18,94
-9,Male,64,19,3
-10,Female,30,19,72
-
-create the csv file and paste the path
-import csv
-with open(r'C:\Users\HP\Desktop\mall.csv', mode='r') as file:    #change the path
-    csv_reader = csv.reader(file)
-    for row in csv_reader:
-        print(row)
-
-8.k-Means Algorithm
-mall.csv
-CustomerID,Gender,Age,Annual Income (k$),Spending Score (1-100)
-1,Male,19,15,39
-2,Male,21,15,81
-3,Female,20,16,6
-4,Female,23,16,77
-5,Female,31,17,40
-6,Female,22,17,76
-7,Female,35,18,6
-8,Female,23,18,94
-9,Male,64,19,3
-10,Female,30,19,72
-
-create a csv file and paste the path in the comment mentioned
-import pandas as pd
-import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans
-X = pd.read_csv(r"C:\Users\HP\Desktop\mall.csv").iloc[:, [3, 4]].values   #change the path
-wcss = []
-for i in range(1, 11):
-    kmeans = KMeans(n_clusters=i, init='k-means++', random_state=42)
-    kmeans.fit(X)
-    wcss.append(kmeans.inertia_)
-plt.plot(range(1, 11), wcss, 'o-')
-plt.title('Elbow Method')
-plt.xlabel('Number of Clusters')
-plt.ylabel('WCSS')
-plt.show()
-kmeans = KMeans(n_clusters=5, init='k-means++', random_state=42)
-y_pred = kmeans.fit_predict(X)
-colors = ['b', 'g', 'r', 'c', 'm']
-for i in range(5):
-    plt.scatter(X[y_pred == i, 0], X[y_pred == i, 1],
-                s=100, c=colors[i], label=f'Cluster {i+1}')
-plt.scatter(kmeans.cluster_centers_[:, 0],
-            kmeans.cluster_centers_[:, 1],
-            s=300, c='y', label='Centroids')
-plt.title('Customer Clusters')
-plt.xlabel('Annual Income (k$)')
-plt.ylabel('Spending Score (1–100)')
-plt.legend()
-plt.show()
-
-9.Naive Bayes Algorithm
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import GaussianNB
-from sklearn.metrics import accuracy_score
-x = np.array([[1,2],[2,3],[3,3],[4,5],[5,7],[6,8],[7,8],[8,9],[9,10],[10,11]])
-y = np.array([0,0,0,0,1,1,1,1,1,1])
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=2)
-model = GaussianNB().fit(x_train, y_train)
-print(f"Accuracy: {accuracy_score(y_test, model.predict(x_test))*100:.2f}%")
-
-10.Logistic Regression
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix 
-X, y = load_iris(return_X_y=True)
-X, y = X[y != 2], y[y != 2]
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-model = LogisticRegression().fit(X_train, y_train)
-y_pred = model.predict(X_test)
-print(f"Accuracy: {accuracy_score(y_test, y_pred)*100:.2f}%")
-print(classification_report(y_test, y_pred))
-print(confusion_matrix(y_test, y_pred))
-X_train_2D = X_train[:, :2]
-model_2D = LogisticRegression().fit(X_train_2D, y_train)
-x_min, x_max = X_train_2D[:,0].min()-1, X_train_2D[:,0].max()+1
-y_min, y_max = X_train_2D[:,1].min()-1, X_train_2D[:,1].max()+1
-xx, yy = np.meshgrid(np.arange(x_min,x_max,0.1), np.arange(y_min,y_max,0.1))
-Z = model_2D.predict(np.c_[xx.ravel(), yy.ravel()]).reshape(xx.shape)
-plt.contourf(xx, yy, Z, alpha=0.3, cmap='coolwarm')
-plt.scatter(X_train_2D[:,0], X_train_2D[:,1], c=y_train, edgecolor='k')
-plt.xlabel('Feature 1')
-plt.ylabel('Feature 2')
-plt.title('Decision Boundary')
-plt.show()
-
-11.Stacked Generalization
-import numpy as np
-from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import StackingClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report 
-X, y = load_iris(return_X_y=True)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)     #test_size=0.5 to avoid 100% accuracy
-base_models = [
- ('dt', DecisionTreeClassifier()),
- ('knn', KNeighborsClassifier()),
- ('svc', SVC(probability=True))
-]
-meta_model = LogisticRegression()
-stack_model = StackingClassifier(estimators=base_models, final_estimator=meta_model, cv=5)
-stack_model.fit(X_train, y_train)
-y_pred = stack_model.predict(X_test)
-print(f"Accuracy: {accuracy_score(y_test, y_pred)*100:.2f}%")
-print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
-print("Classification Report:\n", classification_report(y_test, y_pred))
-
-12.Support Vector Machine
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.datasets import make_blobs
-from sklearn.svm import SVC
-X, Y = make_blobs(n_samples=500, centers=2, cluster_std=0.4, random_state=0)
-clf = SVC(kernel='linear')
-clf.fit(X, Y)
-samples = [[0, 0], [2, 3]]
-for s in samples:
-    print(f"Prediction for {s}: {clf.predict([s])[0]}")
-xfit = np.linspace(X[:, 0].min() - 1, X[:, 0].max() + 1, 100)
-w = clf.coef_[0]
-b = clf.intercept_[0]
-yfit = - (w[0] / w[1]) * xfit - b / w[1]
-plt.scatter(X[:, 0], X[:, 1], c=Y, s=50, cmap='spring')
-plt.plot(xfit, yfit, 'k-', lw=2)
-plt.title("SVM Decision Boundary")
-plt.xlabel("Feature 1")
-plt.ylabel("Feature 2")
-plt.show()
+13.NLTK
+create 2 txt files
+file1.txt - This is a simple example to remove stop words using NLTK.
+file2.txt - output automatically dispalyed
+import nltk
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+stop = set(stopwords.words('english'))
+input_path = r"C:\Users\HP\Desktop\file1.txt" # Path of your input file
+output_path = r"C:\Users\HP\Desktop\file2.txt" # Path of output file
+with open(input_path, "r") as f1, open(output_path, "w") as f2:
+    for line in f1:
+        words = line.split()
+        filtered = [w for w in words if w.lower() not in stop]
+        f2.write(" ".join(filtered) + "\n")
+print(f"Done! Output saved to {output_path}")
